@@ -60,8 +60,8 @@ def checkBook( conn, isbn ):
                 conn.execute("UPDATE BOOK SET CHECKED_IN=1 WHERE ISBN="+str(isbn));
                 conn.commit()
                 print("Checked in " + all_rows[0][1])
-                return 1
-        return 0
+                return 1, all_rows[0][4], all_rows[0][5]
+        return 0,0,0
             
 # check if book exists and check it out
 def checkOutBook( conn, name ):

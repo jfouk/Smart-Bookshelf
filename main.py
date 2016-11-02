@@ -7,14 +7,17 @@ def main():
     conn = bookDatabase.initDb()
     #isbn = cameraIsbn.scanForIsbn()
     #print isbn
-    isbn = 1
+    isbn = ('0545010225','0545010225')
     if isbn:
         #title, width = getProductDimensions.getBookInfo(isbn)
         title, width = getProductDimensions.getBookInfo(('0545010225','0545010225'))
+        isbn = isbn[0]
         if title and width is not 'NaN':
             print title, width
             print "Check if book was checked out.."
-            if (
+            rc, row, position = checkBook( conn, isbn )
+            if rc:
+                print "check book back in.."
 
 
 

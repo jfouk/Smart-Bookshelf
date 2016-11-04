@@ -22,6 +22,7 @@ class LightStrip:
     def turnOnLed(self, ledIds):
         #check that ledId is in range
         for ledId in ledIds:
+            ledId = int(ledId)
             if ledId < self.numLeds:
                 self.onLeds[ledId] = 1
             else:
@@ -38,7 +39,7 @@ class LightStrip:
                 self.leds.setPixelColorRGB(pixel=pixels, red=0, green=0, blue=0)
         self.leds.show()
 
-    def showLeds(self,wait)
+    def showLeds(self,wait):
         self.updateLeds()
         time.sleep(wait)
         self.clearAllLeds()

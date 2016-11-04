@@ -29,8 +29,8 @@ class BookShelf:
             value = value/self.ledWidth
             value = round(value)
             ledId = value + row * self.numLeds
-            print "illuminating id: " + ledId
-            self.lights.turnOnLed(led)
+            print "illuminating id: " + str(ledId)
+            self.lights.turnOnLed((ledId,))
             self.lights.showLeds(5)
 
 

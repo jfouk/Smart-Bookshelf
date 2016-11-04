@@ -38,13 +38,16 @@ class LightStrip:
                 self.leds.setPixelColorRGB(pixel=pixels, red=0, green=0, blue=0)
         self.leds.show()
 
+    def showLeds(self,wait)
+        self.updateLeds()
+        time.sleep(wait)
+        self.clearAllLeds()
+        self.updateLeds()
+
 
 #test code    
 if __name__ == "__main__":
     lStrip = LightStrip(32)
     lStrip.turnOnLed((15,25))
-    lStrip.updateLeds()
-    time.sleep(5)
-    lStrip.clearAllLeds()
-    lStrip.updateLeds()
+    lStrip.showLeds(5)
 

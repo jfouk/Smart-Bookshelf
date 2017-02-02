@@ -3,10 +3,10 @@ import bookDatabase
 
 app = Flask(__name__)
 
-app.route('/')
+@app.route('/')
 def getDatabase():
-    conn = initDb()
-    myList = returnAsDict( conn, 'BOOK' )
+    conn = bookDatabase.initDb()
+    myList = bookDatabase.returnAsDict( conn, 'BOOK' )
     return jsonify(myList)
 
 if __name__ == '__main__':

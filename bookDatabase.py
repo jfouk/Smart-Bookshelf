@@ -111,6 +111,24 @@ def printLibrary(conn, table):
             print "END_POSITION = ", row[1], "\n"
 
 
+# return library as list of  dictionary object
+def returnAsDict( conn, table):
+    cursor = conn.execute("SELECT * from {tn}".format(tn=table))
+    myList = []
+    dictionary = {}
+    for row in cursor:
+        if table is 'BOOK':
+            dictionary["ISBN "] = row[0]
+            dictionary[ "NAME" ] = row[1]
+            # dictionary[ "WIDTH" ] = row[2]
+            dictionary[ "CHECKED_IN "] = row[3]
+            dictionary[ "ROW = "] =  row[4]
+            dictionary[ "POSITION"] =  row[5]
+        # elif table is 'ROWS':
+            # print "ROW_NUM = ", row[0]
+            # print "END_POSITION = ", row[1], "\n"
+            myList.append(dictionary)
+    return myList
         
 
 # check row to see where to place the book
@@ -147,14 +165,19 @@ def updateRowOnDatabase( conn, row, position ):
                       VALUES ("+str(row)+", "+str(position)+") ");
         conn.commit()
 
+
 if __name__ == "__main__":
     conn = initDb()
-    checkOutBook(conn, 'Test Book')
-    checkBook(conn,92598990)
-    insertBook(conn,92598990,'Test Book',0.6)
-    insertBook(conn,93472340,'Test Book 2',1.6)
-    insertBook(conn,91249870,'Test Book 3',0.2)
-    insertBook(conn,95999870,'Test Book 4',24.2)
-    insertBook(conn,91234890,'Test Book 5',10.3)
-    printLibrary(conn,'BOOK')
-    printLibrary(conn,'ROWS')
+    # checkOutBook(conn, 'Test Book')
+    # checkBook(conn,92598990)
+    # insertBook(conn,92598990,'Test Book',0.6)
+    # insertBook(conn,93472340,'Test Book 2',1.6)
+    # insertBook(conn,91249870,'Test Book 3',0.2)
+    # insertBook(conn,95999870,'Test Book 4',24.2)
+    # insertBook(conn,91234890,'Test Book 5',10.3)
+    # printLibrary(conn,'BOOK')
+    # printLibrary(conn,'ROWS')
+    myList = returnAsDict( conn, 'BOOK' )
+    for dictionary in myList:
+        for key in dictionary:
+            print key, ' = ', dictionary[key]

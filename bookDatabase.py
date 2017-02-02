@@ -118,16 +118,24 @@ def returnAsDict( conn, table):
     dictionary = {}
     for row in cursor:
         if table is 'BOOK':
-            dictionary["ISBN "] = row[0]
-            dictionary[ "NAME" ] = row[1]
-            # dictionary[ "WIDTH" ] = row[2]
-            dictionary[ "CHECKED_IN "] = row[3]
-            dictionary[ "ROW = "] =  row[4]
-            dictionary[ "POSITION"] =  row[5]
+            d = {
+                    "ISBN": row[0],
+                    "NAME": row[1],
+                    "CHECKED_IN": row[3],
+                    "ROW" : row[4],
+                    "POSITION": row[5],
+            }
+
+            # dictionary["ISBN "] = row[0]
+            # dictionary[ "NAME" ] = row[1]
+            # # dictionary[ "WIDTH" ] = row[2]
+            # dictionary[ "CHECKED_IN "] = row[3]
+            # dictionary[ "ROW = "] =  row[4]
+            # dictionary[ "POSITION"] =  row[5]
         # elif table is 'ROWS':
             # print "ROW_NUM = ", row[0]
             # print "END_POSITION = ", row[1], "\n"
-            myList.append(dictionary)
+            myList.append(d)
     return myList
         
 

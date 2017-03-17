@@ -11,7 +11,7 @@ def initDb():
     print ("Opened database!\n");
     
     conn.execute('''CREATE TABLE IF NOT EXISTS BOOK
-            (ISBN INT PRIMARY KEY NOT NULL,
+            (ISBN TEXT PRIMARY KEY NOT NULL,
             NAME TEXT NOT NULL,
             WIDTH REAL NOT NULL,
             CHECKED_IN INT NOT NULL,
@@ -31,6 +31,7 @@ def initDb():
 def insertBook( conn, isbn, name, width ):
     if conn:
         print "Adding " + name + " to library..."
+        print isbn
         
         #find where to put the book, try each row
         for row in range(0,max_rows):
@@ -57,7 +58,7 @@ def checkBook( conn, isbn ):
             if all_rows[0][3]:
                 print ("Duplicate book error!")
             else:   # check book back in
-                conn.execute("UPDATE BOOK SET CHECKED_IN=1 WHERE ISBN="+str(isbn));
+                conn.execute("UPDATE BOOK SET CHECKED_IN=1 WHERE ISBN="+isbn);
                 conn.commit()
                 print("Checked in " + all_rows[0][1])
                 return 1, all_rows[0][4], all_rows[0][5]
@@ -91,7 +92,7 @@ def addBookToDatabase( conn, isbn, name, width, row, position ):
     if conn:
         print ("Insert book!");
         conn.execute( "INSERT INTO BOOK (ISBN,NAME,WIDTH,CHECKED_IN,ROW,POSITION) \
-                      VALUES ("+str(isbn)+", '"+name+"', "+str(width)+", 1, "+str(row)+", "+str(position)+" )" );
+                      VALUES ('"+isbn+"', '"+name+"', "+str(width)+", 1, "+str(row)+", "+str(position)+" )" );
         conn.commit()
 
 # print current library
@@ -178,7 +179,7 @@ if __name__ == "__main__":
     conn = initDb()
     # checkOutBook(conn, 'Test Book')
     # checkBook(conn,92598990)
-    # insertBook(conn,92598990,'Test Book',0.6)
+    insertBook(conn,'0545010225','Test Book',0.6)
     # insertBook(conn,93472340,'Test Book 2',1.6)
     # insertBook(conn,91249870,'Test Book 3',0.2)
     # insertBook(conn,95999870,'Test Book 4',24.2)

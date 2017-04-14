@@ -179,7 +179,7 @@ if __name__ == "__main__":
     conn = initDb()
     # checkOutBook(conn, 'Test Book')
     # checkBook(conn,92598990)
-    insertBook(conn,'0545010225','Test Book',0.6)
+    # insertBook(conn,'0545010225','Test Book',0.6)
     # insertBook(conn,93472340,'Test Book 2',1.6)
     # insertBook(conn,91249870,'Test Book 3',0.2)
     # insertBook(conn,95999870,'Test Book 4',24.2)

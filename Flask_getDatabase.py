@@ -16,7 +16,9 @@ def delete():
     print "Received delete request.."
     print "Deleting book: " + content
 #    return jsonify(result=str(1))
-    return jsonify(result=str(0))
+    conn = bookDatabase.initDb()
+    rc = bookDatabase.deleteBook(conn, content)
+    return jsonify(result=str(rc))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

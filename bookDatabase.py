@@ -86,6 +86,25 @@ def checkOutBook( conn, name ):
 
         return 'NaN','NaN'
 
+# delete book
+def deleteBook( conn, isbn ):
+    rc = 0 #0 -failure 1 -success
+    if conn:
+        conn.execute("DELETE FROM BOOK WHERE ISBN=?",(isbn,))
+        conn.commit()
+
+        # check if book is deleted
+        c = conn.cursor()
+        c.execute("SELECT * FROM {tn} WHERE {cn}='{isbn_number}'".\
+                format(tn='BOOK', cn='ISBN', isbn_number=isbn))
+        all_rows = c.fetchall()
+        if all_rows:
+            print( "Book is not deleted " + ISBN )
+        else:
+            print("Deleted book " + isbn)
+            rc = 1
+    return rc
+
 ## _________________________ PRIVATE FUNCTIONS ______________________
 # add a book to the database
 def addBookToDatabase( conn, isbn, name, width, row, position ):

@@ -86,6 +86,28 @@ def checkOutBook( conn, name ):
 
         return 'NaN','NaN'
 
+# check if book exists and check it out
+def checkOutBook( conn, isbn ):
+    if conn:
+        c = conn.cursor()
+        c.execute("SELECT * FROM {tn} WHERE {cn}='{book_name}'".\
+                format(tn='BOOK', cn='ISBN', book_name=isbn))
+        all_rows = c.fetchall()
+
+        # if book already exists, check if it's checked in
+        if all_rows:
+            if all_rows[0][3]:
+                conn.execute("UPDATE BOOK SET CHECKED_IN=0 WHERE ISBN='"+isbn+"'");
+                conn.commit()
+                print("Checked out " + isbn)
+                return all_rows[0][4], all_rows[0][5]
+            else:   # check book back in
+                print("Book is not checked in!")
+        else:
+            print("Book does not exist!")
+
+        return 'NaN','NaN'
+
 # delete book
 def deleteBook( conn, isbn ):
     rc = 0 #0 -failure 1 -success

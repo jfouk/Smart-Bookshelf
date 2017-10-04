@@ -20,6 +20,16 @@ def delete():
     rc = bookDatabase.deleteBook(conn, content)
     return jsonify(result=str(rc))
 
+@app.route('/checkout',methods = ['POST','GET'])
+def checkout():
+    content = request.form['ISBN']
+    print "Received checkout request.."
+    print "Checking out book: " + content
+#    return jsonify(result=str(1))
+    conn = bookDatabase.initDb()
+    rc = bookDatabase.checkOutBook(conn, content)
+    return jsonify(result=str(rc))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
     

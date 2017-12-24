@@ -4,10 +4,13 @@ import json
 
 app = Flask(__name__)
 
+bLight = BookShelfLight('bookshelf_config.txt')
+
 @app.route('/')
 def getDatabase():
     conn = bookDatabase.initDb()
     myList = bookDatabase.returnAsDict( conn, 'BOOK' )
+    # bLight.initValues(1.25,1.1,3,10)
     return jsonify(myList)
 
 @app.route('/delete',methods = ['POST','GET'])

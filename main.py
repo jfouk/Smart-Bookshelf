@@ -1,6 +1,7 @@
 import cameraIsbn
 import getProductDimensions
 import bookDatabase
+import BookShelfControl
 
 def main():
     #set up database

@@ -1,16 +1,17 @@
 from flask import Flask, jsonify, request
 import bookDatabase
 import json
+from simple_example import BookShelfControl
 
 app = Flask(__name__)
 
-bLight = BookShelfLight('bookshelf_config.txt')
+bLight = BookShelfControl.BookShelfLight('bookshelf_config.txt')
 
 @app.route('/')
 def getDatabase():
     conn = bookDatabase.initDb()
     myList = bookDatabase.returnAsDict( conn, 'BOOK' )
-    # bLight.initValues(1.25,1.1,3,10)
+    bLight.initValues(1.25,1.1,3,10)
     return jsonify(myList)
 
 @app.route('/delete',methods = ['POST','GET'])

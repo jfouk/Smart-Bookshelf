@@ -37,9 +37,9 @@ class BookShelf:
             if title is not 'NaN' and width is not 'NaN':
                 isbn = isbn[0] #isbn comes in a list from camera stream
                 print ("Checking in " + title + "!\n" )
-                row, pos = bookDatabase.insertBook(mDb,isbn,title,width)
+                row, pos = bookDatabase.insertBook(self.mDb,isbn,title,width)
                 if row is not 'NaN' and pos is not 'NaN':
-                    return mBLight.lightShelf(row,pos)
+                    return self.mBLight.lightShelf(row,pos)
                 else:
                     print ("Unable to fit " + title + " on the bookshelf!\n")
                     return False
@@ -55,10 +55,10 @@ class BookShelf:
     # inputs 
     #       isbn number
     def checkOut(self, isbn):
-        row, pos = bookDatabase.checkOutBook(mDb, isbn)
+        row, pos = bookDatabase.checkOutBook(self.mDb, isbn)
         # check if valid TODO: maybe flash lights if invalid
         if row is not 'NaN':
-            return mBLight.lightShelf(row,pos)
+            return self.mBLight.lightShelf(row,pos)
         else:
             return False
 
@@ -66,9 +66,9 @@ class BookShelf:
     # - call checkBook to checkin book
     # - illuminate where to place the book
     def checkIn(self, isbn):
-        rc, row, pos = bookDatabase.checkBook(mDb, isbn)
+        rc, row, pos = bookDatabase.checkBook(self.mDb, isbn)
         if rc is 1: #if success
-            return mBLight.lightShelf(row,pos)
+            return self.mBLight.lightShelf(row,pos)
         else:
             return False
 

@@ -6,7 +6,7 @@ max_rows = 3
 ## _______________________PUBLIC FUNCTIONS ____________________________
 #returns connection
 def initDb():
-    conn = sqlite3.connect('bookDatabase.db')
+    conn = sqlite3.connect('bookDatabase.db',check_same_thread=False)
     
     print ("Opened database!\n");
     

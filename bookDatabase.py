@@ -100,14 +100,13 @@ def checkOutBook( conn, isbn ):
                 conn.execute("UPDATE BOOK SET CHECKED_IN=0 WHERE ISBN='"+isbn+"'");
                 conn.commit()
                 print("Checked out " + isbn)
-                # return all_rows[0][4], all_rows[0][5]
-                return 1;
+                return all_rows[0][4], all_rows[0][5]
             else:   # check book back in
                 print("Book is not checked in!")
         else:
             print("Book does not exist!")
 
-        return 0;
+        return 'NaN','NaN';
 
 # delete book
 def deleteBook( conn, isbn ):
@@ -202,6 +201,7 @@ def checkRow( conn, row, width ):
             position = 0
     
         #check if we have exceeded the limit
+        #TODO make this more robust, factor in offset
         if (position + width) > shelf_width:
             return 'NaN'
         else:

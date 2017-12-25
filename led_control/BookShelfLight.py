@@ -55,6 +55,7 @@ class BookShelfLight:
             value = round(value)
             ledId = value + row * self.numLeds
             print ("illuminating id: " + str(ledId))
+            # TODO add wait to decide when to turn this off
             # self.lights.turnOnLed((ledId,))
             # self.lights.showLeds(5)
 

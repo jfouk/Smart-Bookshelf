@@ -23,10 +23,22 @@ def init():
 
 @app.route('/')
 def getDatabase():
-    conn = bookDatabase.initDb()
-    # myList = bookDatabase.returnAsDict( conn, 'BOOK' )
     myList = bShelf.getShelfDict()
     return jsonify(myList)
+
+# add a new book to the bookshelf
+@app.route('/add')
+def addBook():
+    rc = bShelf.addBook()
+    if rc:
+        myList = bShelf.getShelfDict()
+        responseCode = 200
+    else:   #return -1 value if failed
+        myList = {
+                "ISBN": -1,
+                }
+        responseCode = 201
+    return jsonify(myList), responseCode
 
 @app.route('/delete',methods = ['POST','GET'])
 def delete():

@@ -30,6 +30,7 @@ def getDatabase():
 @app.route('/add')
 def addBook():
     rc = bShelf.addBook()
+    sleep(30)
     if rc:
         myList = bShelf.getShelfDict()
         responseCode = 200

@@ -32,7 +32,7 @@ def insertBook( conn, isbn, name, width ):
     if conn:
         print "Adding " + name + " to library..."
         print isbn
-        
+        width = float(width)
         #find where to put the book, try each row
         for row in range(0,max_rows):
             position = checkRow(conn, row, width )
@@ -205,7 +205,7 @@ def checkRow( conn, row, width ):
     
         #check if we have exceeded the limit
         #TODO make this more robust, factor in offset
-        if (position + width) > shelf_width:
+        if (position + float(width)) > shelf_width:
             return 'NaN'
         else:
             return position

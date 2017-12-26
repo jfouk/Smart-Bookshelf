@@ -73,4 +73,6 @@ class BookShelf:
         else:
             return False
 
-
+if __name__ == "__main__":
+    bShelf = BookShelf("bookshelf_config.txt")
+    bShelf.addBook()

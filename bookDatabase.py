@@ -49,7 +49,7 @@ def insertBook( conn, isbn, name, width ):
 def checkBook( conn, isbn ):
     if conn:
         c = conn.cursor()
-        c.execute('SELECT * FROM {tn} WHERE {cn}={isbn_num}'.\
+        c.execute("SELECT * FROM {tn} WHERE {cn}='{isbn_num}'".\
                 format(tn='BOOK', cn='ISBN', isbn_num=isbn))
         all_rows = c.fetchall()
 
@@ -58,10 +58,12 @@ def checkBook( conn, isbn ):
             if all_rows[0][3]:
                 print ("Duplicate book error!")
             else:   # check book back in
-                conn.execute("UPDATE BOOK SET CHECKED_IN=1 WHERE ISBN="+isbn);
+                conn.execute("UPDATE BOOK SET CHECKED_IN=1 WHERE ISBN='"+isbn+"'");
                 conn.commit()
                 print("Checked in " + all_rows[0][1])
                 return 1, all_rows[0][4], all_rows[0][5]
+        else:
+            print("Failed to find " + isbn)
         return 0,0,0
             
 # check if book exists and check it out

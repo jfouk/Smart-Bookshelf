@@ -58,6 +58,7 @@ class BookShelfLight:
             # TODO add wait to decide when to turn this off
             # self.lights.turnOnLed((ledId,))
             # self.lights.showLeds(5)
+            return True
 
     # store static values of this shelf in a file
     # this will store ledWidth, offset, rows, and num LEDs

@@ -66,6 +66,7 @@ class BookShelf:
     # - call checkBook to checkin book
     # - illuminate where to place the book
     def checkIn(self, isbn):
+        print("Starting checkin process\n");
         rc, row, pos = bookDatabase.checkBook(self.mDb, isbn)
         if rc is 1: #if success
             return self.mBLight.lightShelf(row,pos)

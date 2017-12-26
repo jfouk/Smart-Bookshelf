@@ -33,27 +33,22 @@ def main():
 
     # initialize spi and leds objects
     spidev      = file("/dev/spidev0.0", "wb")  # ref to spi connection to the led bar
-    leds        = ledstrip.LEDStrip(pixels=args.leds, spi=spidev)
+    leds        = ledstrip.LEDStrip(pixels=18, spi=spidev)
 
     pixel_edge = 0  # current pixel whose state will be flipped
     turn_on = True  # holds whether pixel will be switched on or off
 
     print "Let's start chasing"
     while ( True ):
-        for pixel_edge in range(0,leds.numPixels()):
-            if turn_on == True:
-                if pixel_edge == 14 or pixel_edge == 15:
-                    leds.setPixelColorRGB(pixel=pixel_edge, red=127, green=127, blue=127)
-                else:
-                    leds.setPixelColorRGB(pixel=pixel_edge, red=0, green=0, blue=0)
-            else:
-                if pixel_edge == 27:
-                    leds.setPixelColorRGB(pixel=pixel_edge, red=127, green=127, blue=127)
-                else:
-                    leds.setPixelColorRGB(pixel=pixel_edge, red=0, green=0, blue=0)
+        if turn_on:
+            leds.setPixelColorRGB(pixel=pixel_edge, red=127, green=127, blue=127)
+        else:
+            leds.setPixelColorRGB(pixel=pixel_edge, red=0, green=0, blue=0)
+        pixel_edge = (pixel_edge + 1) % leds.numPixels()
+        # when pixel goes back to start of strip then switch from on to off, or off to on
+        if pixel_edge == 0: turn_on = not turn_on 
         leds.show()
-        turn_on = not turn_on
-        time.sleep(1)
+        time.sleep(0.02)
         
 
 def pause():
@@ -88,4 +83,4 @@ def test():
 
 
 if __name__ == "__main__":
-    main()
+    main( )

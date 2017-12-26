@@ -34,7 +34,7 @@ def insertBook( conn, isbn, name, width ):
         print isbn
         width = float(width)
         # check if this book exists first
-        rc, row, position = checkBook(isbn)
+        rc, row, position = checkBook(conn, isbn)
         if rc:
             return row, position
         else:

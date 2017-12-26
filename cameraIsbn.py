@@ -82,6 +82,7 @@ def scanForIsbn():
     with picamera.PiCamera() as camera:
         global pool
         pool = [ImageProcessor() for i in range(4)]
+        print pool
         camera.resolution = (640, 480)
         camera.framerate = 30
         #camera.start_preview()
@@ -94,10 +95,17 @@ def scanForIsbn():
             processor = pool.pop()
         processor.terminated = True
         processor.join()
-
+        print processor.isAlive()
+    global count
+    count = 0
+    global done
+    done = False
     # check to see if we have a return value
     return isbn
 
 if __name__ == "__main__":
+    readIsbn = scanForIsbn()
+    print readIsbn
+    print pool
     readIsbn = scanForIsbn()
     print readIsbn

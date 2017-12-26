@@ -33,14 +33,19 @@ def insertBook( conn, isbn, name, width ):
         print "Adding " + name + " to library..."
         print isbn
         width = float(width)
-        #find where to put the book, try each row
-        for row in range(0,max_rows):
-            position = checkRow(conn, row, width )
-            if position is not 'NaN':
-                addBookToDatabase( conn, isbn, name, width, row, position )
-                updateRowOnDatabase( conn, row, position+width )
-                print(name + " added to row " + str(row) + " at " + str(position) + " inches!")
-                return row, position
+        # check if this book exists first
+        rc, row, position = checkBook(isbn)
+        if rc:
+            return row, position
+        else:
+            #find where to put the book, try each row
+            for row in range(0,max_rows):
+                position = checkRow(conn, row, width )
+                if position is not 'NaN':
+                    addBookToDatabase( conn, isbn, name, width, row, position )
+                    updateRowOnDatabase( conn, row, position+width )
+                    print(name + " added to row " + str(row) + " at " + str(position) + " inches!")
+                    return row, position
         #if no room for book, don't print
         return 'NaN','NaN'
 

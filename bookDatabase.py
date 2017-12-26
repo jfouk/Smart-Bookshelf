@@ -165,6 +165,7 @@ def returnAsDict( conn, table):
             d = {
                     "ISBN": row[0],
                     "NAME": row[1],
+                    "WIDTH": row[2],
                     "CHECKED_IN": row[3],
                     "ROW" : row[4],
                     "POSITION": row[5],

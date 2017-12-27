@@ -66,11 +66,14 @@ def getBookInfo( isbn ):
     # tree = getAmznPageByISBN( '9780830844111' )
     #tree = getAmznPageByISBN( '9780545010221' )
     tree = getAmznPageByISBN(isbn[0])
-    return getProductDimensions( tree );
+    author = tree.xpath('//*[contains(@class, "a-link-normal contributorNameID")]')
+    
+    # return getProductDimensions( tree );
+    print author
     
 def main():
     tree = getAmznPageByISBN( '0830844112' )
-    getProductDimensions( tree );
+    getBookInfo( '0830844112' );
 
 if __name__ == "__main__":
     main()

@@ -65,14 +65,23 @@ def getProductDimensions( tree ):
 def getBookInfo( isbn ):
     # tree = getAmznPageByISBN( '9780830844111' )
     #tree = getAmznPageByISBN( '9780545010221' )
-    tree = getAmznPageByISBN(isbn[0])
-    author = tree.xpath('//*[contains(@class, "a-link-normal contributorNameID")]')
+    tree = getAmznPageByISBN(isbn)
+    author = tree.xpath('//*[contains(@class, "a-link-normal contributorNameID")]/text()')
+
+    #bookDescription = tree.xpath('//div[contains(@id, "bookDescription_feature_div")]//div[contains(@id,"iframeContent")]')
+    #bookDescription = tree.xpath("//div[contains(@id, 'bookDescription_feature_div')]//div[contains(@id,'iframeContent')]")
+    bookDescription = tree.xpath("//div[@id='bookDescription_feature_div']//div[@id='bookDesc_iframe_wrapper']")
+    #bookDescription = tree.xpath('//iframe')
+    #print bookDescription[0].attrib.get('src')
     
     # return getProductDimensions( tree );
     print author
+    print bookDescription
+    for name,value in bookDescription[0].items():
+        print('%s = %r' % (name,value))
     
 def main():
-    tree = getAmznPageByISBN( '0830844112' )
+    #tree = getAmznPageByISBN( '0830844112' )
     getBookInfo( '0830844112' );
 
 if __name__ == "__main__":

@@ -69,7 +69,7 @@ class BookShelfLight:
             roundedvalue = round(widthValue)
             if widthValue > roundedvalue:    #if in between 2 leds, illuminate both leds
                 roundedvalue = roundedvalue + 1
-            for x in range(0,roundedValue): # added on all the extra width of leds
+            for x in range(0,int(roundedvalue)): # added on all the extra width of leds
                 ledId = ledId + 1
                 leds.append(ledId)
             
@@ -108,9 +108,9 @@ class BookShelfLight:
 if __name__ == "__main__":
     # bShelf = BookShelfLight(1.25,0,3,9,"bookshelf_config.txt")
     bShelf = BookShelfLight("bookshelf_config.txt")
-    if bShelf.lightShelf(1,2.3) is False:
-        bShelf.initValues(2.43,.5,4,8)
-        bShelf.lightShelf(1,2.3)
+    if bShelf.lightShelf(1,2.3,1) is False:
+        print ("failed");
+    bShelf.lightShelf(0,3,2)
     print (bShelf.ledWidth)
     print (bShelf.offset)
     print (bShelf.rows)

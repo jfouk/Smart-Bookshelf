@@ -35,11 +35,11 @@ class BookShelf:
         # if we get an isbn
         if isbn:
             title, width, height = getProductDimensions.getBookInfo(isbn)
-            if title is not 'NaN' and width is not 'NaN', and height is not 'NaN':
+            if title is not 'NaN' and width is not 'NaN' and height is not 'NaN':
                 isbn = isbn[0] #isbn comes in a list from camera stream
                 print ("Checking in " + title + "!\n" )
                 row, pos, width= bookDatabase.insertBook(self.mDb,isbn,title,width,height)
-                if row is not 'NaN' and pos is not 'NaN' nad width is not 'NaN':
+                if row is not 'NaN' and pos is not 'NaN' and width is not 'NaN':
                     return self.mBLight.lightShelf(row,pos,width)
                 else:
                     print ("Unable to fit " + title + " on the bookshelf!\n")

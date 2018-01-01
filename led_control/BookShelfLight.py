@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# from lightControl import LightStrip
+from lightControl import LightStrip
 
 class BookShelfLight:
     ''' Book shelf object, use this class to control leds
@@ -21,7 +21,7 @@ class BookShelfLight:
         self.rows = 0
         self.numLeds = 0
         self.staticfile = staticfile
-        # self.lights = LightStrip(32)
+        self.lights = LightStrip(54)
         if self.readValues():
             self.isInit = True
         else:
@@ -41,23 +41,42 @@ class BookShelfLight:
 
     # light shelf
     # light lights at specified row and pos
-    # TODO add check for if pos is greater than width of shelf
-    # TODO add width of book to light multiple lights if necessary
-    def lightShelf(self, row, pos):
+    # DONE add width of book to light multiple lights if necessary
+    # TODO test this
+    # TODO add confirmation button
+    def lightShelf(self, row, pos,width):
         if self.isInit is False:
             return False
         elif row > self.rows:
             print ("Requested row is more than supported rows!\n")
             return False
+        elif pos > self.ledWidth*numLeds+offset*2:
+            print ("Exceeded bounds!\n")
+            return False
         else:
+            #print multiple lights depending on width
+            leds = []
             value = pos - self.offset
             value = value/self.ledWidth
-            value = round(value)
-            ledId = value + row * self.numLeds
+            roundedvalue = round(value)
+            ledId = roundedvalue + row * self.numLeds
+            leds.append(ledId)
+            if value > roundedvalue:    #if in between 2 leds, illuminate both leds
+                ledId = ledId + 1
+                leds.append(ledId)
+            #account for width
+            widthValue = width/self.ledWidth
+            roundedvalue = round(widthValue)
+            if widthValue > roundedvalue:    #if in between 2 leds, illuminate both leds
+                roundedvalue = roundedvalue + 1
+            for x in range(0,roundedValue): # added on all the extra width of leds
+                ledId = ledId + 1
+                leds.append(ledId)
+            
             print ("illuminating id: " + str(ledId))
             # TODO add wait to decide when to turn this off
-            # self.lights.turnOnLed((ledId,))
-            # self.lights.showLeds(5)
+            self.lights.turnOnLed(leds)   #illuminate whole list
+            self.lights.showLeds(5)
             return True
 
     # store static values of this shelf in a file

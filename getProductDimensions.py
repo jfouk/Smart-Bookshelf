@@ -40,8 +40,10 @@ def getProductDimensions( tree ):
     
     sizes = re.findall(r'\d+\.\d+|\d+',dims[0])
     sWidth = 'NaN'
+    sHeight = 'NaN'
     if(sizes):
         sWidth = min(sizes)
+        sHeight = max(sizes)
     # find page number and if it's paperback or hardcover
     bookType = 'None'
     pageNumbers = '0'
@@ -59,7 +61,7 @@ def getProductDimensions( tree ):
     print ( title[0] )
     print ( bookType + ": " + pageNumbers[0] )
     print ("Spine width is " + sWidth)
-    return title[0],sWidth
+    return title[0],sWidth,sHeight
 
 
 def getBookInfo( isbn ):

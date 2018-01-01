@@ -17,8 +17,9 @@ class BookShelf:
 
     # init bookshelf
     # set values that we need to know such as ledWidth
-    def init(self,ledWidth,offset,rows,numLeds):
+    def init(self,ledWidth,offset,rows,numLeds, rowList = []):
         self.mBLight.initValues(ledWidth,offset,rows,numLeds)
+        bookDatabase.initBookshelf(self.mDb, rowList )
 
     # returns a dictionary of the books to pass onto flask
     def getShelfDict(self):
@@ -33,13 +34,13 @@ class BookShelf:
         isbn = cameraIsbn.scanForIsbn()
         # if we get an isbn
         if isbn:
-            title, width = getProductDimensions.getBookInfo(isbn)
-            if title is not 'NaN' and width is not 'NaN':
+            title, width, height = getProductDimensions.getBookInfo(isbn)
+            if title is not 'NaN' and width is not 'NaN', and height is not 'NaN':
                 isbn = isbn[0] #isbn comes in a list from camera stream
                 print ("Checking in " + title + "!\n" )
-                row, pos = bookDatabase.insertBook(self.mDb,isbn,title,width)
-                if row is not 'NaN' and pos is not 'NaN':
-                    return self.mBLight.lightShelf(row,pos)
+                row, pos, width= bookDatabase.insertBook(self.mDb,isbn,title,width,height)
+                if row is not 'NaN' and pos is not 'NaN' nad width is not 'NaN':
+                    return self.mBLight.lightShelf(row,pos,width)
                 else:
                     print ("Unable to fit " + title + " on the bookshelf!\n")
                     return False
@@ -55,10 +56,10 @@ class BookShelf:
     # inputs 
     #       isbn number
     def checkOut(self, isbn):
-        row, pos = bookDatabase.checkOutBook(self.mDb, isbn)
+        row, pos, width = bookDatabase.checkOutBook(self.mDb, isbn)
         # check if valid TODO: maybe flash lights if invalid
         if row is not 'NaN':
-            return self.mBLight.lightShelf(row,pos)
+            return self.mBLight.lightShelf(row,pos,width)
         else:
             return False
 
@@ -67,12 +68,28 @@ class BookShelf:
     # - illuminate where to place the book
     def checkIn(self, isbn):
         print("Starting checkin process\n");
-        rc, row, pos = bookDatabase.checkBook(self.mDb, isbn)
+        rc, row, pos,width = bookDatabase.checkBook(self.mDb, isbn)
         if rc is 1: #if success
-            return self.mBLight.lightShelf(row,pos)
+            return self.mBLight.lightShelf(row,pos,width)
         else:
             return False
 
 if __name__ == "__main__":
     bShelf = BookShelf("bookshelf_config.txt")
-    bShelf.addBook()
+    rowList = []
+    rowList.append(
+            {
+                "Width":14.5,
+                "Height":12.0,
+                })
+    rowList.append(
+            {
+                "Width":14.5,
+                "Height":12.0,
+                })
+    rowList.append(
+            {
+                "Width":14.5,
+                "Height":15.0,
+                })
+    bShelf.init(1.25,0,3,18,rowList)

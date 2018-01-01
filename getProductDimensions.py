@@ -63,6 +63,10 @@ def getProductDimensions( tree ):
     print ("Spine width is " + sWidth)
     return title[0],sWidth,sHeight
 
+def getAuthor( tree ):
+    author = tree.xpath('//*[contains(@class, "a-link-normal contributorNameID")]/text()')
+    return author
+
 
 def getBookInfo( isbn ):
     # tree = getAmznPageByISBN( '9780830844111' )

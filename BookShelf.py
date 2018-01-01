@@ -19,7 +19,7 @@ class BookShelf:
     # set values that we need to know such as ledWidth
     def init(self,ledWidth,offset,rows,numLeds, rowList = []):
         self.mBLight.initValues(ledWidth,offset,rows,numLeds)
-        bookDatabase.initBookshelf(self.mDb, rowList )
+        return bookDatabase.initBookshelf(self.mDb, rowList )
 
     # returns a dictionary of the books to pass onto flask
     def getShelfDict(self):

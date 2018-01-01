@@ -9,13 +9,28 @@ bShelf = BookShelf.BookShelf('bookshelf_config.txt')
 
 @app.route('/init',methods = ['POST','GET'])
 def init():
-    content = request.form['ISBN']  #TODO figure out request format
+    ledWidth = request.form['ledWidth']
+    offset = request.form['offset']
+    rows = request.form['rows']
+    numLeds = request.form['numLeds']
+    rowList = []
+    for i in range(0,int(rows)):
+        rowList.append(
+                {
+                    "Width":request.form['width'+i],
+                    "Height":request.form['height'+i]
+                    })
     print "Received init request.."
-    print "Deleting book: " + content
-#    return jsonify(result=str(1))
-    conn = bookDatabase.initDb()
-    rc = bookDatabase.deleteBook(conn, content)
-    if rc:
+    msg = '''Initializing bookshelf...
+             ledWidth={lw}, offset={of}, rows={r}, numLeds={nl}
+        '''.format(lw=ledWidth,of=offset,r=rows,nl=numLeds)
+    print ( msg )
+    for rows in rowList:
+        for key in rows:
+            print(key,' = ',rows[key])
+
+    rc = 0
+    if bShelf.init(ledWidth,offset,rows,numLeds,rowList):
         rc = 1  #Android app takes 1 as true
     else:
         rc = 0  #Android app takes 0 as False

@@ -50,7 +50,7 @@ def initBookshelf( conn, rowList = [] ):
     if cursor.fetchall():
         print(cursor.fetchall())
         print("Cannot update values when there are books in the db!");
-        return
+        return False
     # insert each row into db
     rowId = 0
     for row in rowList:
@@ -59,6 +59,7 @@ def initBookshelf( conn, rowList = [] ):
         print("Adding row "+str(rowId)+" of width "+str(row['Width'])+" and height "+str(row['Height']))
         rowId = rowId + 1
     conn.commit()
+    return True
 
 # insert a book given ISBN, name and width
 # retval: row - which row the book is on

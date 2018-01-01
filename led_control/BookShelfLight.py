@@ -50,7 +50,7 @@ class BookShelfLight:
         elif row > self.rows:
             print ("Requested row is more than supported rows!\n")
             return False
-        elif pos > self.ledWidth*numLeds+offset*2:
+        elif pos > self.ledWidth*self.numLeds+self.offset*2:
             print ("Exceeded bounds!\n")
             return False
         else:

@@ -38,7 +38,10 @@ def getProductDimensions( tree ):
     # find product dimensions
     dims =  tree.xpath('//li/b[contains(text(),"Product Dimensions:")]/following-sibling::text()')
     if not dims:
-        return 'NaN','NaN','NaN'
+        # try to find package dimensions
+        dims =  tree.xpath('//li/b[contains(text(),"Package Dimensions:")]/following-sibling::text()')
+        if not dims:
+            return 'NaN','NaN','NaN'
     
     sizes = re.findall(r'\d+\.\d+|\d+',dims[0])
     sWidth = 'NaN'
@@ -90,7 +93,6 @@ def getBookInfo( isbn ):
     
 def main():
     #tree = getAmznPageByISBN( '0830844112' )
-    getBookInfo( ('0830844112', ));
-
+    getBookInfo( ('0983876606', ));
 if __name__ == "__main__":
     main()

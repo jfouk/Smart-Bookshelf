@@ -71,7 +71,7 @@ def getProductDimensions( tree ):
 
 def getAuthor( tree ):
     author = tree.xpath('//*[contains(@class, "a-link-normal contributorNameID")]/text()')
-    return author
+    return author[0]
 
 def getPictureUrl( tree ):
     picture = tree.xpath('//div[@id="img-canvas"]/img/@data-a-dynamic-image')

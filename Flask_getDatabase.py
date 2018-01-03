@@ -17,17 +17,17 @@ def init():
     for i in range(0,int(rows)):
         rowList.append(
                 {
-                    "Width":request.form['width'+i],
-                    "Height":request.form['height'+i]
+                    "Width":request.form['width'+str(i)],
+                    "Height":request.form['height'+str(i)]
                     })
     print "Received init request.."
     msg = '''Initializing bookshelf...
              ledWidth={lw}, offset={of}, rows={r}, numLeds={nl}
         '''.format(lw=ledWidth,of=offset,r=rows,nl=numLeds)
     print ( msg )
-    for rows in rowList:
-        for key in rows:
-            print(key,' = ',rows[key])
+    for dict in rowList:
+        for key in dict:
+            print(key,' = ',dict[key])
 
     rc = 0
     if bShelf.init(ledWidth,offset,rows,numLeds,rowList):

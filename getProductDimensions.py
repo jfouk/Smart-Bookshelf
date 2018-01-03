@@ -3,6 +3,9 @@ import requests
 #import isbnlib
 import re
 import time
+from PIL import Image
+import StringIO
+import json
 
 def getAmznPageByISBN( isbn ):
     # convert isbn13 to isbn 10
@@ -73,9 +76,15 @@ def getAuthor( tree ):
     return author
 
 def getPictureUrl( tree ):
-    picture = tree.xpath('//div[@id="img-canvas"]/img')
-    print (picture)
-    print (picture[0].attrib.get('src')
+    #picture = tree.xpath('//div[@id="img-canvas"]/img/@src')
+    #picture = tree.xpath('//div[@id="img-canvas"]/img')
+    #picture = picture[0].get('src')
+    #image = Image.open('test2.jpg')
+    #image.show()
+    picture = tree.xpath('//div[@id="img-canvas"]/img/@data-a-dynamic-image')
+    print next(json.loads(picture[0]).iterkeys())
+
+    print picture
 
 def getBookInfo( isbn ):
     # tree = getAmznPageByISBN( '9780830844111' )
@@ -99,6 +108,7 @@ def getBookInfo( isbn ):
     
 def main():
     #tree = getAmznPageByISBN( '0830844112' )
-    getBookInfo( ('0983876606', ));
+    #getBookInfo( ('0983876606', ));
+    getBookInfo( ('0830844112', ));
 if __name__ == "__main__":
     main()

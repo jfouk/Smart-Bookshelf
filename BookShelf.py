@@ -34,11 +34,12 @@ class BookShelf:
         isbn = cameraIsbn.scanForIsbn()
         # if we get an isbn
         if isbn:
-            title, width, height = getProductDimensions.getBookInfo(isbn)
+            title, width, height, author, picture_url = getProductDimensions.getBookInfo(isbn)
             if title is not 'NaN' and width is not 'NaN' and height is not 'NaN':
                 isbn = isbn[0] #isbn comes in a list from camera stream
                 print ("Checking in " + title + "!\n" )
-                row, pos, width= bookDatabase.insertBook(self.mDb,isbn,title,width,height)
+                row, pos, width= bookDatabase.insertBook(self.mDb,isbn,title,width,height,
+                        author, picture_url)
                 if row is not 'NaN' and pos is not 'NaN' and width is not 'NaN':
                     return self.mBLight.lightShelf(row,pos,width)
                 else:
@@ -74,6 +75,28 @@ class BookShelf:
         else:
             return False
 
+    # testing function, no camera, no lights
+    def testAddBook( isbn ):
+        if isbn:
+            title, width, height, author, picture_url = getProductDimensions.getBookInfo(isbn)
+            if title is not 'NaN' and width is not 'NaN' and height is not 'NaN':
+                isbn = isbn[0] #isbn comes in a list from camera stream
+                print ("Checking in " + title + "!\n" )
+                row, pos, width= bookDatabase.insertBook(self.mDb,isbn,title,width,height,
+                        author, picture_url)
+                if row is not 'NaN' and pos is not 'NaN' and width is not 'NaN':
+                    return True
+                else:
+                    print ("Unable to fit " + title + " on the bookshelf!\n")
+                    return False
+
+            else:
+                print("Unable to get product dimensions for " + isbn[0] + "!\n")
+                return False
+        else:
+            # maybe loop again and try again
+            return False
+
 if __name__ == "__main__":
     bShelf = BookShelf("bookshelf_config.txt")
     rowList = []
@@ -93,3 +116,4 @@ if __name__ == "__main__":
                 "Height":15.0,
                 })
     bShelf.init(1.25,0,3,18,rowList)
+    bShelf.testAddBook(('1416915281',))

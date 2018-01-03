@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 
 shelf_width = 24.75
 max_rows = 3
@@ -17,7 +18,11 @@ def initDb():
             HEIGHT REAL NOT NULL,
             CHECKED_IN INT NOT NULL,
             ROW INT NOT NULL,
-            POSITION REAL NOT NULL);''')
+            POSITION REAL NOT NULL,
+            AUTHOR TEXT NOT NULL,
+            PIC_URL TEXT NOT NULL,
+            LAST_DATE TEXT NOT NULL
+            );''')
 
     # Row Database
     # Contains:
@@ -64,7 +69,7 @@ def initBookshelf( conn, rowList = [] ):
 # insert a book given ISBN, name and width
 # retval: row - which row the book is on
 #         position - position the book is located in inches from the left
-def insertBook( conn, isbn, name, width, height ):
+def insertBook( conn, isbn, name, width, height, author, picture_url):
     if conn:
         print ("Adding " + name + " to library...")
         print (isbn)
@@ -82,7 +87,8 @@ def insertBook( conn, isbn, name, width, height ):
                     # updateRowOnDatabase( conn, row, position+width )
             row, position = findRowPos(conn,width, height)
             print(name + " added to row " + str(row) + " at " + str(position) + " inches!")
-            addBookToDatabase( conn, isbn, name, width, height, row, position)
+            addBookToDatabase( conn, isbn, name, width, height, row, position,
+                    author,picture_url)
             return row, position, width
         return 'NaN','NaN', 'NaN'
 
@@ -101,7 +107,8 @@ def checkBook( conn, isbn ):
                 print ("Duplicate book error!")
                 return 1 #can't tdo anything just return value
             else:   # check book back in
-                conn.execute("UPDATE BOOK SET CHECKED_IN=1 WHERE ISBN='"+isbn+"'");
+                conn.execute("UPDATE BOOK SET CHECKED_IN=1,LAST_DATE="+\
+                        datetime.date.today().isoformat()+"WHERE ISBN='"+isbn+"'");
                 conn.commit()
                 print("Checked in " + all_rows[0][1])
                 return 1, all_rows[0][5], all_rows[0][6], all_rows[0][2]
@@ -142,7 +149,8 @@ def checkOutBook( conn, isbn ):
         # if book already exists, check if it's checked in
         if all_rows:
             if all_rows[0][4]:
-                conn.execute("UPDATE BOOK SET CHECKED_IN=0 WHERE ISBN='"+isbn+"'");
+                conn.execute("UPDATE BOOK SET CHECKED_IN=0, LAST_DATE="+\
+                    datetime.date.today().isoformat()+"WHERE ISBN='"+isbn+"'");
                 conn.commit()
                 print("Checked out " + isbn)
                 return all_rows[0][5], all_rows[0][6], all_rows[0][2]   #return row,pos,width
@@ -174,11 +182,19 @@ def deleteBook( conn, isbn ):
 
 ## _________________________ PRIVATE FUNCTIONS ______________________
 # add a book to the database
-def addBookToDatabase( conn, isbn, name, width, height, row, position ):
+def addBookToDatabase( conn, isbn, name, width, height, row, position, author, picture_url ):
     if conn:
         print ("Insert book!");
-        conn.execute( "INSERT INTO BOOK (ISBN,NAME,WIDTH,HEIGHT,CHECKED_IN,ROW,POSITION) \
-                      VALUES ('"+isbn+"', '"+name+"', "+str(width)+", "+str(height)+", 1, "+str(row)+", "+str(position)+" )" );
+        # conn.execute( "INSERT INTO BOOK (ISBN,NAME,WIDTH,HEIGHT,CHECKED_IN,ROW,POSITION,) \
+                      # VALUES ('"+isbn+"', '"+name+"', "+str(width)+", "+str(height)+", 1, "+str(row)+", "+str(position)+" )" );
+        insertString='''INSERT INTO BOOK
+                        (ISBN,NAME,WIDTH,HEIGHT,CHECKED_IN,ROW,POSITION,AUTHOR,PIC_URL,LAST_DATE)
+                        VALUES ({I},{N},{W},{H},{C},{R},{P},{A},{PIC},{LD})
+                    '''.format(I=isbn,N=name,W=str(width),H=str(height),C='1',
+                            R=str(row),P=str(position),A=author,PIC=picture_url,
+                            LD=datetime.date.today().isoformat())
+        print(insertString)
+        conn.execute(insertString)
         conn.commit()
 
 # print current library
@@ -205,30 +221,30 @@ def returnAsDict( conn, table):
     myList = []
     dictionary = {}
     for row in cursor:
-        if table is 'BOOK':
-            d = {
-                    "ISBN": row[0],
-                    "NAME": row[1],
-                    "WIDTH": row[2],
-                    "HEIGHT": row[3],
-                    "CHECKED_IN" : row[4],
-                    "ROW" : row[5],
-                    "POSITION": row[6],
-            }
+        # if table is 'BOOK':
+            # d = {
+                    # "ISBN": row[0],
+                    # "NAME": row[1],
+                    # "WIDTH": row[2],
+                    # "HEIGHT": row[3],
+                    # "CHECKED_IN" : row[4],
+                    # "ROW" : row[5],
+                    # "POSITION": row[6],
+            # }
 
-            # dictionary["ISBN "] = row[0]
-            # dictionary[ "NAME" ] = row[1]
-            # # dictionary[ "WIDTH" ] = row[2]
-            # dictionary[ "CHECKED_IN "] = row[3]
-            # dictionary[ "ROW = "] =  row[4]
-            # dictionary[ "POSITION"] =  row[5]
-        # elif table is 'ROWS':
-            # print "ROW_NUM = ", row[0]
-            # print "END_POSITION = ", row[1], "\n"
-            myList.append(d)
-        else:
-            for column in row:
-                print(column)
+            # # dictionary["ISBN "] = row[0]
+            # # dictionary[ "NAME" ] = row[1]
+            # # # dictionary[ "WIDTH" ] = row[2]
+            # # dictionary[ "CHECKED_IN "] = row[3]
+            # # dictionary[ "ROW = "] =  row[4]
+            # # dictionary[ "POSITION"] =  row[5]
+        # # elif table is 'ROWS':
+            # # print "ROW_NUM = ", row[0]
+            # # print "END_POSITION = ", row[1], "\n"
+            # myList.append(d)
+        # else:
+        for column in row:
+            print(column)
     return myList
         
 # shelf helper functions

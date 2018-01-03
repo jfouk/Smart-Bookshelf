@@ -76,25 +76,21 @@ class BookShelf:
             return False
 
     # testing function, no camera, no lights
-    def testAddBook( isbn ):
-        if isbn:
-            title, width, height, author, picture_url = getProductDimensions.getBookInfo(isbn)
-            if title is not 'NaN' and width is not 'NaN' and height is not 'NaN':
-                isbn = isbn[0] #isbn comes in a list from camera stream
-                print ("Checking in " + title + "!\n" )
-                row, pos, width= bookDatabase.insertBook(self.mDb,isbn,title,width,height,
-                        author, picture_url)
-                if row is not 'NaN' and pos is not 'NaN' and width is not 'NaN':
-                    return True
-                else:
-                    print ("Unable to fit " + title + " on the bookshelf!\n")
-                    return False
-
+    def testAddBook( self,isbn ):
+        title, width, height, author, picture_url = getProductDimensions.getBookInfo(isbn)
+        if title is not 'NaN' and width is not 'NaN' and height is not 'NaN':
+            isbn = isbn[0] #isbn comes in a list from camera stream
+            print ("Checking in " + title + "!\n" )
+            row, pos, width= bookDatabase.insertBook(self.mDb,isbn,title,width,height,
+                    author, picture_url)
+            if row is not 'NaN' and pos is not 'NaN' and width is not 'NaN':
+                return True
             else:
-                print("Unable to get product dimensions for " + isbn[0] + "!\n")
+                print ("Unable to fit " + title + " on the bookshelf!\n")
                 return False
+
         else:
-            # maybe loop again and try again
+            print("Unable to get product dimensions for " + isbn[0] + "!\n")
             return False
 
 if __name__ == "__main__":
@@ -115,5 +111,11 @@ if __name__ == "__main__":
                 "Width":14.5,
                 "Height":15.0,
                 })
-    bShelf.init(1.25,0,3,18,rowList)
-    bShelf.testAddBook(('1416915281',))
+    #bShelf.init(1.25,0,3,18,rowList)
+    #bShelf.testAddBook( ('1416915281',) )
+    bShelf.checkOut('1416915281')
+    bShelf.checkIn('1416915281')
+    myList = bShelf.getShelfDict()
+    for dictionary in myList:
+        for key in dictionary:
+            print (key, ' = ', dictionary[key])

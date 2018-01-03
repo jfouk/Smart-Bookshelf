@@ -106,8 +106,8 @@ def checkBook( conn, isbn ):
                 print ("Duplicate book error!")
                 return 1 #can't tdo anything just return value
             else:   # check book back in
-                conn.execute("UPDATE BOOK SET CHECKED_IN=1,LAST_DATE="+\
-                        datetime.date.today().isoformat()+"WHERE ISBN='"+isbn+"'");
+                conn.execute("UPDATE BOOK SET CHECKED_IN=1,LAST_DATE='"+\
+                        datetime.date.today().isoformat()+"' WHERE ISBN='"+isbn+"'");
                 conn.commit()
                 print("Checked in " + all_rows[0][1])
                 return 1, all_rows[0][5], all_rows[0][6], all_rows[0][2]
@@ -140,6 +140,7 @@ def checkOutBook( conn, name ):
 # check if book exists and check it out
 def checkOutBook( conn, isbn ):
     if conn:
+        print(datetime.date.today().isoformat())
         c = conn.cursor()
         c.execute("SELECT * FROM {tn} WHERE {cn}='{book_name}'".\
                 format(tn='BOOK', cn='ISBN', book_name=isbn))
@@ -148,8 +149,8 @@ def checkOutBook( conn, isbn ):
         # if book already exists, check if it's checked in
         if all_rows:
             if all_rows[0][4]:
-                conn.execute("UPDATE BOOK SET CHECKED_IN=0, LAST_DATE="+\
-                    datetime.date.today().isoformat()+"WHERE ISBN='"+isbn+"'");
+                conn.execute("UPDATE BOOK SET CHECKED_IN=0, LAST_DATE='"+\
+                    datetime.date.today().isoformat()+"' WHERE ISBN='"+isbn+"'");
                 conn.commit()
                 print("Checked out " + isbn)
                 return all_rows[0][5], all_rows[0][6], all_rows[0][2]   #return row,pos,width

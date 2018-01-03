@@ -72,6 +72,10 @@ def getAuthor( tree ):
     author = tree.xpath('//*[contains(@class, "a-link-normal contributorNameID")]/text()')
     return author
 
+def getPictureUrl( tree ):
+    picture = tree.xpath('//div[@id="img-canvas"]/img')
+    print (picture)
+    print (picture[0].attrib.get('src')
 
 def getBookInfo( isbn ):
     # tree = getAmznPageByISBN( '9780830844111' )
@@ -84,6 +88,8 @@ def getBookInfo( isbn ):
     # bookDescription = tree.xpath("//div[@id='bookDescription_feature_div']//div[@id='bookDesc_iframe_wrapper']")
     #bookDescription = tree.xpath('//iframe')
     #print bookDescription[0].attrib.get('src')
+    print (getAuthor(tree))
+    getPictureUrl(tree)
     
     return getProductDimensions( tree );
     # print author

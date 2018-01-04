@@ -221,30 +221,24 @@ def returnAsDict( conn, table):
     myList = []
     dictionary = {}
     for row in cursor:
-        # if table is 'BOOK':
-            # d = {
-                    # "ISBN": row[0],
-                    # "NAME": row[1],
-                    # "WIDTH": row[2],
-                    # "HEIGHT": row[3],
-                    # "CHECKED_IN" : row[4],
-                    # "ROW" : row[5],
-                    # "POSITION": row[6],
-            # }
+        if table is 'BOOK':
+            d = {
+                    "ISBN": row[0],
+                    "NAME": row[1],
+                    "WIDTH": row[2],
+                    "HEIGHT": row[3],
+                    "CHECKED_IN" : row[4],
+                    "ROW" : row[5],
+                    "POSITION": row[6],
+                    "AUTHOR" : row[7],
+                    "PIC_URL" : row[8],
+                    "LAST_DATE" : row[9],
+            }
 
-            # # dictionary["ISBN "] = row[0]
-            # # dictionary[ "NAME" ] = row[1]
-            # # # dictionary[ "WIDTH" ] = row[2]
-            # # dictionary[ "CHECKED_IN "] = row[3]
-            # # dictionary[ "ROW = "] =  row[4]
-            # # dictionary[ "POSITION"] =  row[5]
-        # # elif table is 'ROWS':
-            # # print "ROW_NUM = ", row[0]
-            # # print "END_POSITION = ", row[1], "\n"
-            # myList.append(d)
-        # else:
-        for column in row:
-            print(column)
+            myList.append(d)
+        else:
+            for column in row:
+                print(column)
     return myList
         
 # shelf helper functions

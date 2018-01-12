@@ -27,6 +27,7 @@ class LightStrip:
                 self.onLeds[ledId] = 1
             else:
                 print "Led ID ",str(ledId)," out of range!!"
+        self.updateLeds()
 
     def clearAllLeds(self):
         self.onLeds = [0] * self.numLeds
@@ -42,6 +43,11 @@ class LightStrip:
     def showLeds(self,wait):
         self.updateLeds()
         time.sleep(wait)
+        self.clearAllLeds()
+        self.updateLeds()
+
+
+    def turnOffLeds(self)
         self.clearAllLeds()
         self.updateLeds()
 

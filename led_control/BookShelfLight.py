@@ -76,8 +76,10 @@ class BookShelfLight:
             print ("illuminating id: " + str(ledId))
             # TODO add wait to decide when to turn this off
             self.lights.turnOnLed(leds)   #illuminate whole list
-            self.lights.showLeds(5)
             return True
+
+    def turnOffLeds(self):
+        self.lights.turnOffLeds()
 
     # store static values of this shelf in a file
     # this will store ledWidth, offset, rows, and num LEDs

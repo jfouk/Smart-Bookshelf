@@ -44,16 +44,41 @@ def getDatabase():
 # add a new book to the bookshelf
 @app.route('/add')
 def addBook():
-    rc = bShelf.addBook()
+    rc = bShelf.scanCamera()    # confirmation path
+    responseCode = 200
     if rc:
-        myList = bShelf.getShelfDict()
-        responseCode = 200
-    else:   #return -1 value if failed
-        myList = {
-                "ISBN": -1,
-                }
+        rc = 1  #Android app takes 1 as true
+    else:
+        rc = 0  #Android app takes 0 as False
         responseCode = 201
-    return jsonify(myList), responseCode
+    return jsonify(result=str(rc)), responseCode
+
+        # myList = bShelf.getShelfDict()
+        # responseCode = 200
+    # else:   #return -1 value if failed
+        # myList = {
+                # "ISBN": -1,
+                # }
+        # responseCode = 201
+    # return jsonify(myList), responseCode
+@app.route('/confirm')
+def confirm():
+    rc = bShelf.confirm()
+    if rc:
+        rc = 1  #Android app takes 1 as true
+    else:
+        rc = 0  #Android app takes 0 as False
+    return jsonify(result=str(rc))
+    # rc = bShelf.addBook()
+    # if rc:
+        # myList = bShelf.getShelfDict()
+        # responseCode = 200
+    # else:   #return -1 value if failed
+        # myList = {
+                # "ISBN": -1,
+                # }
+        # responseCode = 201
+    # return jsonify(myList), responseCode
 
 @app.route('/delete',methods = ['POST','GET'])
 def delete():
@@ -70,9 +95,6 @@ def checkout():
     content = request.form['ISBN']
     print "Received checkout request.."
     print "Checking out book: " + content
-#    return jsonify(result=str(1))
-    # conn = bookDatabase.initDb()
-    # rc = bookDatabase.checkOutBook(conn, content)
     rc = bShelf.checkOut(content)
     if rc:
         rc = 1  #Android app takes 1 as true

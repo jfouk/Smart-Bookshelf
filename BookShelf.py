@@ -6,15 +6,23 @@ from led_control import BookShelfLight
 
 # the main bookshelf class
 # Consider this the glue that holds the lights and database together
-#
+#   @TODO need a state mgr, in flask, return back what next step is
 # Member Data:
 #   BookShelfLight - class to control bookshelf leds, contains information about bookshelf
 #   database connection - connection to bookshelf database
 class BookShelf:
+    #STATES
+    READY="READY"
+    CAMERA_SCANNED="CAMERA_SCANNED"
+    PRODUCT_INFO="PRODUCT_INFO"
+    WAIT_FOR_CONFIRM="WAIT_FOR_CONFIRM"
+
     def __init__(self,staticfile):
         self.mBLight = BookShelfLight.BookShelfLight(staticfile)
         self.mDb = bookDatabase.initDb()
-
+        self.mState = READY
+        self.mISBN = 0
+    
     # init bookshelf
     # set values that we need to know such as ledWidth
     def init(self,ledWidth,offset,rows,numLeds, rowList = []):
@@ -53,6 +61,54 @@ class BookShelf:
             # maybe loop again and try again
             return False
 
+    # scan camera to find isbn
+    def scanCamera(self):
+        self.mState = CAMERA_SCANNED
+        isbn = cameraIsbn.scanForIsbn()
+        if isbn:
+            self.mISBN = isbn;
+        else:
+            self.mState = READY
+            return False
+        # return and wait for confirmation
+        return True
+
+    def getProductInfo(self):
+        if self.mISBN:
+            title, width, height, author, picture_url = getProductDimensions.getBookInfo(self.mISBN)
+            if title != 'NaN' and width != 'NaN' and height != 'NaN':
+                self.mISBN = self.mISBN[0] #isbn comes in a list from camera stream
+                print ("Checking in " + title + "!\n" )
+                row, pos, width= bookDatabase.insertBook(self.mDb,self.mISBN,title,width,height,
+                        author, picture_url)
+                if row != 'NaN' and pos != 'NaN' and width != 'NaN':
+                    self.mState = WAIT_FOR_CONFIRM
+                    return self.mBLight.lightShelf(row,pos,width)
+                else:
+                    print ("Unable to fit " + title + " on the bookshelf!\n")
+                    self.mState = READY
+                    return False
+
+            else:
+                print("Unable to get product dimensions for " + self.mISBN[0] + "!\n")
+                self.mState = READY
+                return False
+
+    # book is placed, so we don't need the leds anymore
+    def confirmBookPlaced(self):
+        self.mBLight.turnOffLeds()
+        self.mState = READY
+        return True
+
+
+    # action confirmed by app, move on to next state
+    def confirm(self):
+        if self.mState == CAMERA_SCANNED:
+            rc = getProductInfo()
+        elif self.mState == WAIT_FOR_CONFIRM
+            rc = confirmBookPlaced()
+        return rc
+
     # checkout book, updating DB and illuminating bookshelf
     # inputs 
     #       isbn number
@@ -60,8 +116,10 @@ class BookShelf:
         row, pos, width = bookDatabase.checkOutBook(self.mDb, isbn)
         # check if valid TODO: maybe flash lights if invalid
         if row != 'NaN':
+            self.mState = WAIT_FOR_CONFIRM
             return self.mBLight.lightShelf(row,pos,width)
         else:
+            self.mState = READY
             return False
 
     # checkin book
@@ -71,8 +129,10 @@ class BookShelf:
         print("Starting checkin process\n");
         rc, row, pos,width = bookDatabase.checkBook(self.mDb, isbn)
         if rc is 1: #if success
+            self.mState = WAIT_FOR_CONFIRM
             return self.mBLight.lightShelf(row,pos,width)
         else:
+            self.mState = READY
             return False
 
     # testing function, no camera, no lights

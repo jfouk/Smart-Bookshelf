@@ -33,7 +33,7 @@ def main():
 
     # initialize spi and leds objects
     spidev      = file("/dev/spidev0.0", "wb")  # ref to spi connection to the led bar
-    leds        = ledstrip.LEDStrip(pixels=18, spi=spidev)
+    leds        = ledstrip.LEDStrip(pixels=54, spi=spidev)
 
     pixel_edge = 0  # current pixel whose state will be flipped
     turn_on = True  # holds whether pixel will be switched on or off

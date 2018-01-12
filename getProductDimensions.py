@@ -71,6 +71,8 @@ def getProductDimensions( tree ):
 
 def getAuthor( tree ):
     author = tree.xpath('//*[contains(@class, "a-link-normal contributorNameID")]/text()')
+    if not author:
+        author = tree.xpath('//span[@class="author notFaded"]/a[@class="a-link-normal"]/text()')
     return author[0]
 
 def getPictureUrl( tree ):
@@ -89,10 +91,14 @@ def getBookInfo( isbn ):
     # bookDescription = tree.xpath("//div[@id='bookDescription_feature_div']//div[@id='bookDesc_iframe_wrapper']")
     #bookDescription = tree.xpath('//iframe')
     #print bookDescription[0].attrib.get('src')
-    author = getAuthor(tree)
-    picture_url = getPictureUrl(tree)
-    
-    title, width,height =  getProductDimensions( tree );
+    try:
+        author = getAuthor(tree)
+        picture_url = getPictureUrl(tree)
+        
+        title, width,height =  getProductDimensions( tree );
+    except:
+        print("Could not get book info!");
+        return 'NaN', 'NaN', 'NaN', 'NaN', 'NaN'
     return title, width, height, author, picture_url
     # print author
     # print bookDescription

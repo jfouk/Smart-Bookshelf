@@ -35,12 +35,12 @@ class BookShelf:
         # if we get an isbn
         if isbn:
             title, width, height, author, picture_url = getProductDimensions.getBookInfo(isbn)
-            if title is not 'NaN' and width is not 'NaN' and height is not 'NaN':
+            if title != 'NaN' and width != 'NaN' and height != 'NaN':
                 isbn = isbn[0] #isbn comes in a list from camera stream
                 print ("Checking in " + title + "!\n" )
                 row, pos, width= bookDatabase.insertBook(self.mDb,isbn,title,width,height,
                         author, picture_url)
-                if row is not 'NaN' and pos is not 'NaN' and width is not 'NaN':
+                if row != 'NaN' and pos != 'NaN' and width != 'NaN':
                     return self.mBLight.lightShelf(row,pos,width)
                 else:
                     print ("Unable to fit " + title + " on the bookshelf!\n")
@@ -59,7 +59,7 @@ class BookShelf:
     def checkOut(self, isbn):
         row, pos, width = bookDatabase.checkOutBook(self.mDb, isbn)
         # check if valid TODO: maybe flash lights if invalid
-        if row is not 'NaN':
+        if row != 'NaN':
             return self.mBLight.lightShelf(row,pos,width)
         else:
             return False
@@ -113,8 +113,9 @@ if __name__ == "__main__":
                 })
     #bShelf.init(1.25,0,3,18,rowList)
     #bShelf.testAddBook( ('1416915281',) )
-    bShelf.checkOut('1416915281')
-    bShelf.checkIn('1416915281')
+    #bShelf.checkOut('1416915281')
+    #bShelf.checkIn('1416915281')
+    bShelf.testAddBook( ('1423124545',) )
     myList = bShelf.getShelfDict()
     for dictionary in myList:
         for key in dictionary:

@@ -56,6 +56,8 @@ def initBookshelf( conn, rowList = [] ):
         print("Cannot update values when there are books in the db!");
         return False
     # insert each row into db
+    # delete all current rows
+    conn.execute("DELETE FROM ROWS");
     rowId = 0
     for row in rowList:
         conn.execute( "INSERT INTO ROWS (ROW_NUM,START_POS,WIDTH,HEIGHT) \

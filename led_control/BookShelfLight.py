@@ -32,10 +32,10 @@ class BookShelfLight:
     # initialize class with necessary variables
     # must run on first start up if no staticfile created
     def initValues(self,ledWidth,offset,rows,numLeds):
-        self.ledWidth = ledWidth
-        self.offset = offset
-        self.rows = rows
-        self.numLeds = numLeds
+        self.ledWidth = float(ledWidth)
+        self.offset = float(offset)
+        self.rows = int(rows)
+        self.numLeds = int(numLeds)
         self.isInit = True
         self.storeValues()
 

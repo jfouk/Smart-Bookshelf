@@ -47,7 +47,7 @@ class LightStrip:
         self.updateLeds()
 
 
-    def turnOffLeds(self)
+    def turnOffLeds(self):
         self.clearAllLeds()
         self.updateLeds()
 

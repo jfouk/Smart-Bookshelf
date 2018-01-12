@@ -20,7 +20,7 @@ class BookShelf:
     def __init__(self,staticfile):
         self.mBLight = BookShelfLight.BookShelfLight(staticfile)
         self.mDb = bookDatabase.initDb()
-        self.mState = READY
+        self.mState = self.READY
         self.mISBN = 0
     
     # init bookshelf
@@ -63,12 +63,12 @@ class BookShelf:
 
     # scan camera to find isbn
     def scanCamera(self):
-        self.mState = CAMERA_SCANNED
+        self.mState = self.CAMERA_SCANNED
         isbn = cameraIsbn.scanForIsbn()
         if isbn:
             self.mISBN = isbn;
         else:
-            self.mState = READY
+            self.mState = self.READY
             return False
         # return and wait for confirmation
         return True
@@ -82,31 +82,31 @@ class BookShelf:
                 row, pos, width= bookDatabase.insertBook(self.mDb,self.mISBN,title,width,height,
                         author, picture_url)
                 if row != 'NaN' and pos != 'NaN' and width != 'NaN':
-                    self.mState = WAIT_FOR_CONFIRM
+                    self.mState = self.WAIT_FOR_CONFIRM
                     return self.mBLight.lightShelf(row,pos,width)
                 else:
                     print ("Unable to fit " + title + " on the bookshelf!\n")
-                    self.mState = READY
+                    self.mState = self.READY
                     return False
 
             else:
                 print("Unable to get product dimensions for " + self.mISBN[0] + "!\n")
-                self.mState = READY
+                self.mState = self.READY
                 return False
 
     # book is placed, so we don't need the leds anymore
     def confirmBookPlaced(self):
         self.mBLight.turnOffLeds()
-        self.mState = READY
+        self.mState = self.READY
         return True
 
 
     # action confirmed by app, move on to next state
     def confirm(self):
-        if self.mState == CAMERA_SCANNED:
-            rc = getProductInfo()
-        elif self.mState == WAIT_FOR_CONFIRM
-            rc = confirmBookPlaced()
+        if self.mState == self.CAMERA_SCANNED:
+            rc = self.getProductInfo()
+        elif self.mState == self.WAIT_FOR_CONFIRM:
+            rc = self.confirmBookPlaced()
         return rc
 
     # checkout book, updating DB and illuminating bookshelf
@@ -116,10 +116,10 @@ class BookShelf:
         row, pos, width = bookDatabase.checkOutBook(self.mDb, isbn)
         # check if valid TODO: maybe flash lights if invalid
         if row != 'NaN':
-            self.mState = WAIT_FOR_CONFIRM
+            self.mState = self.WAIT_FOR_CONFIRM
             return self.mBLight.lightShelf(row,pos,width)
         else:
-            self.mState = READY
+            self.mState = self.READY
             return False
 
     # checkin book
@@ -129,10 +129,10 @@ class BookShelf:
         print("Starting checkin process\n");
         rc, row, pos,width = bookDatabase.checkBook(self.mDb, isbn)
         if rc is 1: #if success
-            self.mState = WAIT_FOR_CONFIRM
+            self.mState = self.WAIT_FOR_CONFIRM
             return self.mBLight.lightShelf(row,pos,width)
         else:
-            self.mState = READY
+            self.mState = self.READY
             return False
 
     # testing function, no camera, no lights

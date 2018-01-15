@@ -22,6 +22,7 @@ class BookShelfLight:
         self.numLeds = 0
         self.staticfile = staticfile
         self.lights = LightStrip(54)
+        self.turnOffLeds()
         if self.readValues():
             self.isInit = True
         else:

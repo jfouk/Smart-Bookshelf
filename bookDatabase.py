@@ -7,7 +7,7 @@ max_rows = 3
 ## _______________________PUBLIC FUNCTIONS ____________________________
 #returns connection
 def initDb():
-    conn = sqlite3.connect('bookDatabase.db',check_same_thread=False)
+    conn = sqlite3.connect('/home/pi/bookDatabase.db',check_same_thread=False)
     
     print ("Opened database!\n");
     
@@ -86,10 +86,10 @@ def insertBook( conn, isbn, name, width, height, author, picture_url):
                 # if position is not 'NaN':
                     # addBookToDatabase( conn, isbn, name, width, row, position )
                     # updateRowOnDatabase( conn, row, position+width )
-            row, position = findRowPos(conn,width, height)
-            print(name + " added to row " + str(row) + " at " + str(position) + " inches!")
             addBookToDatabase( conn, isbn, name, width, height, row, position,
                     author,picture_url)
+            row, position = findRowPos(conn,width, height)
+            print(name + " added to row " + str(row) + " at " + str(position) + " inches!")
             return row, position, width
         return 'NaN','NaN', 'NaN'
 
@@ -191,7 +191,7 @@ def addBookToDatabase( conn, isbn, name, width, height, row, position, author, p
                       # VALUES ('"+isbn+"', '"+name+"', "+str(width)+", "+str(height)+", 1, "+str(row)+", "+str(position)+" )" );
         insertString='''INSERT INTO BOOK
                         (ISBN,NAME,WIDTH,HEIGHT,CHECKED_IN,ROW,POSITION,AUTHOR,PIC_URL,LAST_DATE)
-                        VALUES ('{I}','{N}',{W},{H},{C},{R},{P},'{A}','{PIC}','{LD}')
+                        VALUES ("{I}","{N}",{W},{H},{C},{R},{P},"{A}","{PIC}","{LD}")
                     '''.format(I=isbn,N=name,W=str(width),H=str(height),C='1',
                             R=str(row),P=str(position),A=author,PIC=picture_url,
                             LD=datetime.date.today().isoformat())

@@ -77,7 +77,11 @@ def getAuthor( tree ):
 
 def getPictureUrl( tree ):
     picture = tree.xpath('//div[@id="img-canvas"]/img/@data-a-dynamic-image')
-    return next(json.loads(picture[0]).iterkeys())
+    if picture:
+        return next(json.loads(picture[0]).iterkeys())
+    else:
+        picture = tree.xpath('//div[@id="mainImageContainer"]/img/@data-a-dynamic-image')
+        return next(json.loads(picture[0]).iterkeys())
 
 
 def getBookInfo( isbn ):
@@ -92,10 +96,15 @@ def getBookInfo( isbn ):
     #bookDescription = tree.xpath('//iframe')
     #print bookDescription[0].attrib.get('src')
     try:
-        author = getAuthor(tree)
-        print (author)
+        # try to get pic_url, if can't no big deal
         picture_url = getPictureUrl(tree)
         print (picture_url)
+    except:
+        picture_url = 'NaN'
+        print("Could not get picture url!")
+    try:
+        author = getAuthor(tree)
+        print (author)
         title, width,height =  getProductDimensions( tree );
         print ( title)
         print (width)

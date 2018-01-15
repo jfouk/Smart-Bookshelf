@@ -93,9 +93,13 @@ def getBookInfo( isbn ):
     #print bookDescription[0].attrib.get('src')
     try:
         author = getAuthor(tree)
+        print (author)
         picture_url = getPictureUrl(tree)
-        
+        print (picture_url)
         title, width,height =  getProductDimensions( tree );
+        print ( title)
+        print (width)
+        print (height)
     except:
         print("Could not get book info!");
         return 'NaN', 'NaN', 'NaN', 'NaN', 'NaN'
@@ -108,6 +112,7 @@ def getBookInfo( isbn ):
 def main():
     #tree = getAmznPageByISBN( '0830844112' )
     #getBookInfo( ('0983876606', ));
-    getBookInfo( ('0830844112', ));
+    getBookInfo( ('0804190100', ));
+
 if __name__ == "__main__":
     main()

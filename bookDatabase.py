@@ -173,7 +173,10 @@ def deleteBook( conn, isbn ):
                 format(tn='BOOK', cn='ISBN', isbn_num=isbn))
         all_rows = c.fetchall()
         if all_rows:
+<<<<<<< HEAD
             all_rows = all_rows[0]
+=======
+>>>>>>> 3aff7ecaa2c409a1ab53721f4d8715062741e2c3
             freeUpRowPos(conn,all_rows[5],all_rows[6],all_rows[2],all_rows[3])
         conn.execute("DELETE FROM BOOK WHERE ISBN=?",(isbn,))
         conn.commit()

@@ -22,6 +22,11 @@ class BookShelfLight:
         self.numLeds = 0
         self.staticfile = staticfile
         self.lights = LightStrip(54)
+        #turn on all leds when initialized
+        ledList = list( range(0,54) )
+        self.lights.showLeds(2)
+        self.lights.turnOnLed(ledList)
+
         self.turnOffLeds()
         if self.readValues():
             self.isInit = True

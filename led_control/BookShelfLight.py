@@ -42,9 +42,16 @@ class BookShelfLight:
 
     # light shelf
     # light lights at specified row and pos
+    # position starts at left of bookshelf always, but lights will snake
+    # down from the right
+    # ex:
+    #       3 - 2 - 1
+    #       4 - 5 - 6
+    #       9 - 8 - 7
+    # So odd rows will need to be reversed
     # DONE add width of book to light multiple lights if necessary
     # TODO test this
-    # TODO add confirmation button
+    # DONE add confirmation button
     def lightShelf(self, row, pos,width):
         if self.isInit is False:
             return False
@@ -60,18 +67,28 @@ class BookShelfLight:
             value = pos - self.offset
             value = value/self.ledWidth
             roundedvalue = round(value)
-            ledId = roundedvalue + row * self.numLeds
+            # if row is odd, need to reverse it
+            if row % 2 != 0:
+                rowOffset = row + 1 * self.numLeds
+                modifier = -1   #set modifier to move backwards along the led string
+            else:
+                rowOffset = row * self.numLeds
+                modifier = 1
+
+            ledId = roundedvalue*modifier + row * self.numLeds
             leds.append(ledId)
             if value > roundedvalue:    #if in between 2 leds, illuminate both leds
-                ledId = ledId + 1
+                ledId = ledId + modifier
                 leds.append(ledId)
-            #account for width
+
+            #account for width, find how many leds the width translates to, and add that
+            # to the strip
             widthValue = width/self.ledWidth
             roundedvalue = round(widthValue)
             if widthValue > roundedvalue:    #if in between 2 leds, illuminate both leds
                 roundedvalue = roundedvalue + 1
-            for x in range(0,int(roundedvalue)): # added on all the extra width of leds
-                ledId = ledId + 1
+            for x in range(0,int(roundedvalue)): # add on all the extra width of leds
+                ledId = ledId + modifier
                 leds.append(ledId)
             
             print ("illuminating id: " + str(ledId))

@@ -167,11 +167,17 @@ def checkOutBook( conn, isbn ):
 def deleteBook( conn, isbn ): 
     rc = 0 #0 -failure 1 -success 
     if conn:
+        # get book info to delete it
+        c = conn.cursor()
+        c.execute("SELECT * FROM {tn} WHERE {cn}='{isbn_num}'".\
+                format(tn='BOOK', cn='ISBN', isbn_num=isbn))
+        all_rows = c.fetchall()
+        if all_rows:
+            freeUpRowPos(conn,all_rows[5],all_rows[6],all_rows[2],all_rows[3])
         conn.execute("DELETE FROM BOOK WHERE ISBN=?",(isbn,))
         conn.commit()
 
         # check if book is deleted
-        c = conn.cursor()
         c.execute("SELECT * FROM {tn} WHERE {cn}='{isbn_number}'".\
                 format(tn='BOOK', cn='ISBN', isbn_number=isbn))
         all_rows = c.fetchall()
